@@ -4,53 +4,25 @@ namespace Savannabits\Modular\Commands;
 
 use Illuminate\Foundation\Console\ModelMakeCommand as BaseModelMakeCommand;
 use Illuminate\Support\Str;
-use Savannabits\Modular\Facades\Modular;
-use Savannabits\Modular\Module;
+use Savannabits\Modular\Support\Concerns\GeneratesModularFiles;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
 
 #[AsCommand(name: 'modular:make-model')]
 class ModelMakeCommand extends BaseModelMakeCommand
 {
+    use GeneratesModularFiles;
+
     protected $name = 'modular:make-model';
 
     protected $description = 'Create a new Eloquent model class in a modular package';
-
-    protected function getArguments(): array
-    {
-        return array_merge(parent::getArguments(), [
-            ['module', InputArgument::REQUIRED, 'The name of the module in which this should be installed'],
-        ]);
-    }
-
-    public function getModule(): Module
-    {
-        return Modular::module($this->argument('module'));
-    }
-
-    protected function getDefaultNamespace($rootNamespace): string
-    {
-        return $rootNamespace.'\\Models';
-    }
-
-    protected function rootNamespace(): string
-    {
-        return $this->getModule()->getRootNamespace();
-    }
-
-    protected function getPath($name): string
-    {
-        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
-
-        return $this->getModule()->srcPath(str_replace('\\', '/', $name).'.php');
-    }
 
     protected function createFactory(): void
     {
         $factory = Str::studly($this->argument('name'));
 
-        $this->call('make:factory', [
+        $this->call('modular:make-factory', [
             'name' => "{$factory}Factory",
+            'module' => $this->getModule()->name(),
             '--model' => $this->qualifyClass($this->getNameInput()),
         ]);
     }
@@ -115,5 +87,10 @@ class ModelMakeCommand extends BaseModelMakeCommand
             'name' => "{$policy}Policy",
             '--model' => $this->qualifyClass($this->getNameInput()),
         ]);
+    }
+
+    protected function getRelativeNamespace(): string
+    {
+        return 'Models';
     }
 }

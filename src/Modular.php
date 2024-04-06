@@ -16,4 +16,10 @@ class Modular
     {
         return new Module($name);
     }
+
+    public function packagePath(string $path = ''): string
+    {
+        //return the base path of this package
+        return __DIR__.'/../'.($path ? DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR) : '');
+    }
 }
