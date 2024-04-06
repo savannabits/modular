@@ -17,16 +17,16 @@ use function Laravel\Prompts\confirm;
 trait CanManipulateFiles
 {
     /**
-     * @param array<string> $paths
+     * @param  array<string>  $paths
      */
     protected function checkForCollision(array $paths): bool
     {
         foreach ($paths as $path) {
-            if (!$this->fileExists($path)) {
+            if (! $this->fileExists($path)) {
                 continue;
             }
 
-            if (!confirm(basename($path) . ' already exists, do you want to overwrite it?')) {
+            if (! confirm(basename($path).' already exists, do you want to overwrite it?')) {
                 $this->components->error("{$path} already exists, aborting.");
 
                 return true;
@@ -39,7 +39,7 @@ trait CanManipulateFiles
     }
 
     /**
-     * @param array<string, string> $replacements
+     * @param  array<string, string>  $replacements
      *
      * @throws FileNotFoundException
      * @throws ContainerExceptionInterface
@@ -50,7 +50,7 @@ trait CanManipulateFiles
         $filesystem = app(Filesystem::class);
 
         // Get the correct stub path whether published or not
-        $stubPath = $this->getDefaultStubPath() . "/{$stub}.stub";
+        $stubPath = $this->getDefaultStubPath()."/{$stub}.stub";
 
         $stub = str($filesystem->get($stubPath));
 
@@ -58,7 +58,7 @@ trait CanManipulateFiles
             $stub = $stub->replace("{{ {$key} }}", $replacement);
         }
 
-        $stub = (string)$stub;
+        $stub = (string) $stub;
 
         $this->writeFile($targetPath, $stub);
     }
@@ -85,7 +85,7 @@ trait CanManipulateFiles
     {
         $reflectionClass = new ReflectionClass($this);
 
-        return (string)str($reflectionClass->getFileName())
+        return (string) str($reflectionClass->getFileName())
             ->beforeLast('Commands')
             ->append('../stubs');
     }

@@ -7,11 +7,15 @@ use Illuminate\Support\Stringable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+
 class ModularServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'modular';
+
     public static string $vendor = 'savannabits';
+
     public static string $viewNamespace = 'modular';
+
     public function configurePackage(Package $package): void
     {
         /*
@@ -30,8 +34,7 @@ class ModularServiceProvider extends PackageServiceProvider
                 $command
                     ->askToStarRepoOnGitHub($name)
                     ->startWith(fn (InstallCommand $command) => $this->installationSteps($command));
-            })
-        ;
+            });
         $this->mergeConfigFrom($this->package->basePath('/../config/modular.php'), 'modular');
     }
 
@@ -40,10 +43,10 @@ class ModularServiceProvider extends PackageServiceProvider
         $command->comment('Configuring Composer merge plugin:');
         $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
         // Add the modules repositories into compose if they don't exist
-        if (!isset($composerJson['repositories'])){
+        if (! isset($composerJson['repositories'])) {
             $composerJson['repositories'] = [];
         }
-        if (!collect($composerJson['repositories'])->contains(fn ($repo) => $repo['type'] === 'path' && $repo['url'] === config('modular.path').'/*')) {
+        if (! collect($composerJson['repositories'])->contains(fn ($repo) => $repo['type'] === 'path' && $repo['url'] === config('modular.path').'/*')) {
             $composerJson['repositories'][] = [
                 'type' => 'path',
                 'url' => config('modular.path').'/*',
@@ -52,7 +55,7 @@ class ModularServiceProvider extends PackageServiceProvider
                 ],
             ];
         }
-        if (!isset($composerJson['extra']['merge-plugin'])) {
+        if (! isset($composerJson['extra']['merge-plugin'])) {
             $composerJson['extra']['merge-plugin'] = [
                 'include' => [
                     'modules/*/composer.json',
@@ -65,7 +68,7 @@ class ModularServiceProvider extends PackageServiceProvider
             ];
 
             // Ensure the composer-merge-plugin is in the list of allowed plugins
-            if (!isset($composerJson['config']['allow-plugins'])) {
+            if (! isset($composerJson['config']['allow-plugins'])) {
                 $composerJson['config']['allow-plugins'] = [];
             }
             // If allowed-plugins is set to true, disregard
@@ -93,7 +96,7 @@ class ModularServiceProvider extends PackageServiceProvider
     {
         $command->comment('Ensuring modular path exists:');
         $path = config('modular.path');
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             mkdir($path, 0755, true);
             $command->info("Directory $path created successfully");
         } else {
