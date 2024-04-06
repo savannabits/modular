@@ -25,7 +25,7 @@ class Module
         $this->title = Str::of($name)->kebab()->title()->replace('-', ' ')->toString();
         // If the module does not exist, throw an error
         if (! is_dir(app()->basePath(config('modular.path').DIRECTORY_SEPARATOR.$this->name))) {
-            abort(404, "Module $name does not exist");
+            abort(404, "Module $this->title does not exist");
         }
         $this->studlyName = Str::of($name)->studly()->toString();
         $this->namespace = config('modular.namespace').'\\'.$this->studlyName;

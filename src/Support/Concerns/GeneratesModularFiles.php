@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Savannabits\Modular\Facades\Modular;
 use Savannabits\Modular\Module;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Finder\Finder;
 
 trait GeneratesModularFiles
 {
@@ -24,7 +25,12 @@ trait GeneratesModularFiles
     }
     public function getModule(): Module
     {
-        return Modular::module($this->argument('module'));
+        try {
+            return Modular::module($this->argument('module'));
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+            exit(1);
+        }
     }
 
     protected function getDefaultNamespace($rootNamespace): string
@@ -47,5 +53,16 @@ trait GeneratesModularFiles
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
         return $this->getModule()->srcPath(str_replace('\\', '/', $name).'.php');
+    }
+
+    protected function possibleModels()
+    {
+        $modelPath = $this->getModule()->srcPath('Models');
+
+        return collect(Finder::create()->files()->depth(0)->in($modelPath))
+            ->map(fn ($file) => $file->getBasename('.php'))
+            ->sort()
+            ->values()
+            ->all();
     }
 }
