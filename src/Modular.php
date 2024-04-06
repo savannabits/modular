@@ -11,4 +11,9 @@ class Modular
             proc_close($process);
         }
     }
+
+    public function module(string $name): Module
+    {
+        return new Module($name);
+    }
 }
