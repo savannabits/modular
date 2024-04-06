@@ -5,13 +5,15 @@ namespace Savannabits\Modular\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Savannabits\Modular\Facades\Modular;
+
 use function Laravel\Prompts\text;
 
 class ActivateModuleCommand extends Command
 {
-
     public $signature = 'modular:activate {name?}';
+
     public $description = 'Activate a module';
+
     private string $moduleName;
 
     public function handle(): void
@@ -24,7 +26,7 @@ class ActivateModuleCommand extends Command
     private function activateModule(): void
     {
         $moduleName = $this->moduleName;
-        $repoName = config('modular.vendor','modular').'/'.$moduleName;
+        $repoName = config('modular.vendor', 'modular').'/'.$moduleName;
         Modular::execCommand('composer require '.$repoName.':@dev');
         Modular::execCommand("php artisan $moduleName:install");
     }
