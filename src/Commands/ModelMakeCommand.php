@@ -52,8 +52,9 @@ class ModelMakeCommand extends BaseModelMakeCommand
     {
         $seeder = Str::studly(class_basename($this->argument('name')));
 
-        $this->call('make:seeder', [
+        $this->call('modular:make-seeder', [
             'name' => "{$seeder}Seeder",
+            'module' => $this->getModule()->name(),
         ]);
     }
 
@@ -66,7 +67,8 @@ class ModelMakeCommand extends BaseModelMakeCommand
 
         $modelName = $this->qualifyClass($this->getNameInput());
 
-        $this->call('make:controller', array_filter([
+        $this->call('modular:make-controller', array_filter([
+            'module' => $this->getModule()->name(),
             'name' => "{$controller}Controller",
             '--model' => $this->option('resource') || $this->option('api') ? $modelName : null,
             '--api' => $this->option('api'),
