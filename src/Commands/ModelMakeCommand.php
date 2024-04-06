@@ -4,19 +4,18 @@ namespace Savannabits\Modular\Commands;
 
 use Illuminate\Foundation\Console\ModelMakeCommand as BaseModelMakeCommand;
 use Illuminate\Support\Str;
-use Savannabits\Modular\Facades\Modular;
-use Savannabits\Modular\Module;
 use Savannabits\Modular\Support\Concerns\GeneratesModularFiles;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Input\InputArgument;
 
 #[AsCommand(name: 'modular:make-model')]
 class ModelMakeCommand extends BaseModelMakeCommand
 {
     use GeneratesModularFiles;
+
     protected $name = 'modular:make-model';
 
     protected $description = 'Create a new Eloquent model class in a modular package';
+
     protected function createFactory(): void
     {
         $factory = Str::studly($this->argument('name'));

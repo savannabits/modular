@@ -3,6 +3,7 @@
 namespace Savannabits\Modular\Commands;
 
 use Savannabits\Modular\Support\Concerns\GeneratesModularFiles;
+
 use function Laravel\Prompts\confirm;
 
 class ControllerMakeCommand extends \Illuminate\Routing\Console\ControllerMakeCommand
@@ -10,7 +11,9 @@ class ControllerMakeCommand extends \Illuminate\Routing\Console\ControllerMakeCo
     use GeneratesModularFiles;
 
     protected $name = 'modular:make-controller';
+
     protected $description = 'Create a new controller class in a modular package';
+
     protected function getRelativeNamespace(): string
     {
         return '\\Http\\Controllers';
@@ -40,16 +43,13 @@ class ControllerMakeCommand extends \Illuminate\Routing\Console\ControllerMakeCo
 
     /**
      * Build the model replacement values.
-     *
-     * @param  array  $replace
-     * @return array
      */
     protected function buildModelReplacements(array $replace): array
     {
         $modelClass = $this->parseModel($this->option('model'));
 
         if (! class_exists($modelClass, false) && confirm("A {$modelClass} model does not exist. Do you want to generate it?", default: true)) {
-            $this->call('modular:make-model', ['name' => $modelClass,'module' => $this->getModule()->name()]);
+            $this->call('modular:make-model', ['name' => $modelClass, 'module' => $this->getModule()->name()]);
         }
 
         $replace = $this->buildFormRequestReplacements($replace, $modelClass);
@@ -102,11 +102,8 @@ class ControllerMakeCommand extends \Illuminate\Routing\Console\ControllerMakeCo
     }
 
     /**
-     * @param $modelClass
-     * @param $storeRequestClass
-     * @param $updateRequestClass
      * @return string[]
-     * TODO: Replace this with a call to the modular:make-request command
+     *                  TODO: Replace this with a call to the modular:make-request command
      */
     protected function generateFormRequests($modelClass, $storeRequestClass, $updateRequestClass): array
     {
