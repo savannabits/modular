@@ -18,7 +18,7 @@ class ModelMakeCommand extends BaseModelMakeCommand
 
     protected function getArguments(): array
     {
-        return array_merge(parent::getArguments(),[
+        return array_merge(parent::getArguments(), [
             ['module', InputArgument::REQUIRED, 'The name of the module in which this should be installed'],
         ]);
     }
@@ -37,9 +37,11 @@ class ModelMakeCommand extends BaseModelMakeCommand
     {
         return $this->getModule()->getRootNamespace();
     }
+
     protected function getPath($name): string
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
         return $this->getModule()->srcPath(str_replace('\\', '/', $name).'.php');
     }
 
@@ -55,8 +57,6 @@ class ModelMakeCommand extends BaseModelMakeCommand
 
     /**
      * Create a migration file for the model.
-     *
-     * @return void
      */
     protected function createMigration(): void
     {
@@ -75,8 +75,6 @@ class ModelMakeCommand extends BaseModelMakeCommand
 
     /**
      * Create a seeder file for the model.
-     *
-     * @return void
      */
     protected function createSeeder(): void
     {
@@ -89,8 +87,6 @@ class ModelMakeCommand extends BaseModelMakeCommand
 
     /**
      * Create a controller for the model.
-     *
-     * @return void
      */
     protected function createController(): void
     {
@@ -110,8 +106,6 @@ class ModelMakeCommand extends BaseModelMakeCommand
 
     /**
      * Create a policy file for the model.
-     *
-     * @return void
      */
     protected function createPolicy(): void
     {
