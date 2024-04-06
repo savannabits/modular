@@ -4,14 +4,13 @@ namespace Savannabits\Modular\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
-use Savannabits\Modular\Facades\Modular;
 use Savannabits\Modular\Support\Concerns\GeneratesModularFiles;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class FactoryMakeCommand extends GeneratorCommand
 {
     use GeneratesModularFiles;
+
     /**
      * The console command name.
      *

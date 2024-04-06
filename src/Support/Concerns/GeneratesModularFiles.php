@@ -22,6 +22,7 @@ trait GeneratesModularFiles
             ? $customPath
             : Modular::packagePath(trim($stub, DIRECTORY_SEPARATOR));
     }
+
     public function getModule(): Module
     {
         return Modular::module($this->argument('module'));
@@ -29,7 +30,7 @@ trait GeneratesModularFiles
 
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return trim($rootNamespace,'\\').'\\'.trim(Str::replace(DIRECTORY_SEPARATOR,'\\',$this->getRelativeNamespace()), '\\');
+        return trim($rootNamespace, '\\').'\\'.trim(Str::replace(DIRECTORY_SEPARATOR, '\\', $this->getRelativeNamespace()), '\\');
     }
 
     protected function getRelativeNamespace(): string
