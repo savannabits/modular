@@ -92,9 +92,9 @@ class Module
         return $this->databasePath('migrations'.DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR), relative: $relative);
     }
 
-    public function seedsPath(string $path = '', bool $relative = false): string
+    public function seedersPath(string $path = '', bool $relative = false): string
     {
-        return $this->databasePath('seeds'.DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR), relative: $relative);
+        return $this->databasePath('seeders'.DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR), relative: $relative);
     }
 
     public function factoriesPath(string $path = '', bool $relative = false): string
