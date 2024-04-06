@@ -42,6 +42,11 @@ class Module
         return $basePath.($path ? DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR) : '');
     }
 
+    public function getRootNamespace(): string
+    {
+        return $this->namespace.'\\';
+    }
+
     public function makeNamespace(string $relativeNamespace = ''): string
     {
         return $this->namespace.($relativeNamespace ? '\\'.ltrim($relativeNamespace, '\\') : '');
