@@ -23,7 +23,7 @@ class ControllerMakeCommand extends \Illuminate\Routing\Console\ControllerMakeCo
     {
         $parentModelClass = $this->parseModel($this->option('parent'));
 
-        if (! class_exists($parentModelClass, false) &&
+        if (! class_exists($parentModelClass) &&
             confirm("A {$parentModelClass} model does not exist. Do you want to generate it?", default: true)) {
             $this->call('modular:make-model', ['name' => $parentModelClass, 'module' => $this->getModule()->name()]);
         }
@@ -48,7 +48,7 @@ class ControllerMakeCommand extends \Illuminate\Routing\Console\ControllerMakeCo
     {
         $modelClass = $this->parseModel($this->option('model'));
 
-        if (! class_exists($modelClass, false) && confirm("A {$modelClass} model does not exist. Do you want to generate it?", default: true)) {
+        if (! class_exists($modelClass) && confirm("A {$modelClass} model does not exist. Do you want to generate it?", default: true)) {
             $this->call('modular:make-model', ['name' => $modelClass, 'module' => $this->getModule()->name()]);
         }
 
