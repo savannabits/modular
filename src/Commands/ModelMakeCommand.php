@@ -85,8 +85,9 @@ class ModelMakeCommand extends BaseModelMakeCommand
     {
         $policy = Str::studly(class_basename($this->argument('name')));
 
-        $this->call('make:policy', [
+        $this->call('modular:make-policy', [
             'name' => "{$policy}Policy",
+            'module' => $this->getModule()->name(),
             '--model' => $this->qualifyClass($this->getNameInput()),
         ]);
     }
