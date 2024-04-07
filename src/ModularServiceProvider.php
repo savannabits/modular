@@ -28,6 +28,7 @@ class ModularServiceProvider extends PackageServiceProvider
             ->hasConfigFile('modular')
             ->hasViews(static::$viewNamespace)
             ->hasCommands($this->getCommands())
+            ->hasMigrations($this->getMigrationFiles())
             ->hasInstallCommand(function (InstallCommand $command) {
                 // get repo name from composer.json
                 $name = json_decode(file_get_contents(base_path('composer.json')))?->name;

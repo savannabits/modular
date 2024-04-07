@@ -109,14 +109,16 @@ class ControllerMakeCommand extends \Illuminate\Routing\Console\ControllerMakeCo
     {
         $storeRequestClass = 'Store'.class_basename($modelClass).'Request';
 
-        $this->call('make:request', [
+        $this->call('modular:make-request', [
             'name' => $storeRequestClass,
+            'module' => $this->getModule()->name(),
         ]);
 
         $updateRequestClass = 'Update'.class_basename($modelClass).'Request';
 
-        $this->call('make:request', [
+        $this->call('modular:make-request', [
             'name' => $updateRequestClass,
+            'module' => $this->getModule()->name(),
         ]);
 
         return [$storeRequestClass, $updateRequestClass];
