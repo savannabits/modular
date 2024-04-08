@@ -106,4 +106,9 @@ class Module
     {
         return $this->path('src'.DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR), $relative);
     }
+
+    public function resourcePath(string $string, bool $relative = false): string
+    {
+        return $this->path('resources'.DIRECTORY_SEPARATOR.trim($string, DIRECTORY_SEPARATOR), $relative);
+    }
 }

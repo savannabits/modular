@@ -11,7 +11,7 @@ use Savannabits\Modular\Support\Concerns\CanManipulateFiles;
 
 use function Laravel\Prompts\text;
 
-class MakeModuleCommand extends Command
+class ModuleMakeCommand extends Command
 {
     use CanManipulateFiles;
 

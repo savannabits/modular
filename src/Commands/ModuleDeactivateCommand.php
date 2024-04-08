@@ -8,11 +8,11 @@ use Savannabits\Modular\Facades\Modular;
 
 use function Laravel\Prompts\text;
 
-class ActivateModuleCommand extends Command
+class ModuleDeactivateCommand extends Command
 {
-    public $signature = 'modular:activate {name?}';
+    public $signature = 'modular:deactivate {name?}';
 
-    public $description = 'Activate a module';
+    public $description = 'Deactivate a module';
 
     private string $moduleName;
 
@@ -20,14 +20,13 @@ class ActivateModuleCommand extends Command
     {
         $this->moduleName = Str::kebab($this->argument('name') ?? text('Enter the module name', 'e.g My Blog MyBlog, my-blog'));
         $this->info("Activating module: $this->moduleName");
-        $this->activateModule();
+        $this->deactivateModule();
     }
 
-    private function activateModule(): void
+    private function deactivateModule(): void
     {
         $moduleName = $this->moduleName;
         $repoName = config('modular.vendor', 'modular').'/'.$moduleName;
-        Modular::execCommand('composer require '.$repoName.':@dev');
-        Modular::execCommand("php artisan $moduleName:install");
+        Modular::execCommand("composer remove $repoName");
     }
 }
