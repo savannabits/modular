@@ -53,12 +53,12 @@ trait GeneratesModularFiles
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
-        return $this->getModule()->srcPath(str_replace('\\', '/', $name).'.php');
+        return $this->getModule()->appPath(str_replace('\\', '/', $name).'.php');
     }
 
     protected function possibleModels()
     {
-        $modelPath = $this->getModule()->srcPath('Models');
+        $modelPath = $this->getModule()->appPath('Models');
 
         return collect(Finder::create()->files()->depth(0)->in($modelPath))
             ->map(fn ($file) => $file->getBasename('.php'))

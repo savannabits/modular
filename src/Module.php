@@ -102,9 +102,17 @@ class Module
         return $this->databasePath('factories'.DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR), $relative);
     }
 
+    /**
+     * @deprecated Use appPath instead
+     */
     public function srcPath(string $path = '', bool $relative = false): string
     {
-        return $this->path('src'.DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR), $relative);
+        return $this->appPath($path, $relative);
+    }
+
+    public function appPath(string $path = '', bool $relative = false): string
+    {
+        return $this->path('app'.DIRECTORY_SEPARATOR.trim($path, DIRECTORY_SEPARATOR), $relative);
     }
 
     public function resourcePath(string $string, bool $relative = false): string

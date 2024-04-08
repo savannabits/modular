@@ -7,6 +7,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Savannabits\Modular\Facades\Modular;
 use Savannabits\Modular\Support\Concerns\CanManipulateFiles;
 
 use function Laravel\Prompts\text;
@@ -86,7 +87,7 @@ class ModuleMakeCommand extends Command
             ],
             'autoload' => [
                 'psr-4' => [
-                    $this->moduleNamespace.'\\' => 'src/',
+                    $this->moduleNamespace.'\\' => 'app/',
                     $this->moduleNamespace.'\\Database\\Factories\\' => 'database/factories/',
                     $this->moduleNamespace.'\\Database\\Seeders\\' => 'database/seeders/',
                 ],
@@ -123,7 +124,7 @@ class ModuleMakeCommand extends Command
      */
     private function generateModuleServiceProvider(): void
     {
-        $path = $this->modulePath.'/src/'.$this->moduleStudlyName.'ServiceProvider.php';
+        $path = Modular::module($this->moduleName)->appPath($this->moduleStudlyName.'ServiceProvider.php');
         $namespace = $this->moduleNamespace;
         $class = $this->moduleStudlyName.'ServiceProvider';
         $this->copyStubToApp('module.provider', $path, [
