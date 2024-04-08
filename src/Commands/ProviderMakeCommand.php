@@ -3,7 +3,6 @@
 namespace Savannabits\Modular\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Illuminate\Support\ServiceProvider;
 use Savannabits\Modular\Support\Concerns\GeneratesModularFiles;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -12,6 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 class ProviderMakeCommand extends GeneratorCommand
 {
     use GeneratesModularFiles;
+
     /**
      * The console command name.
      *
@@ -36,8 +36,6 @@ class ProviderMakeCommand extends GeneratorCommand
 
     /**
      * Get the stub file for the generator.
-     *
-     * @return string
      */
     protected function getStub(): string
     {
@@ -51,8 +49,6 @@ class ProviderMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
@@ -61,4 +57,3 @@ class ProviderMakeCommand extends GeneratorCommand
         ];
     }
 }
-
