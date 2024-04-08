@@ -3,12 +3,12 @@
 namespace Savannabits\Modular\Commands;
 
 use Illuminate\Support\Str;
-use Savannabits\Modular\Facades\Modular;
 use Savannabits\Modular\Support\Concerns\GeneratesModularFiles;
 
 class ViewMakeCommand extends \Illuminate\Foundation\Console\ViewMakeCommand
 {
     use GeneratesModularFiles;
+
     protected $name = 'modular:make-view';
 
     protected $description = 'Create a new view file in a modular package';
