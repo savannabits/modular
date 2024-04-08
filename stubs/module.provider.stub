@@ -25,6 +25,13 @@ class {{ class }} extends PackageServiceProvider
         $this->loadMigrationsFrom($this->package->basePath('/../database/migrations'));
     }
 
+    public function packageRegistered(): void
+    {
+        foreach ($this->getProviders() as $provider) {
+            $this->app->register($provider);
+        }
+    }
+
     private function furtherInstallationSteps(InstallCommand $command)
     {
         //
@@ -41,6 +48,13 @@ class {{ class }} extends PackageServiceProvider
     {
         return array_merge($this->discoverCommands(), [
             // Your other commands
+        ]);
+    }
+
+    private function getProviders(): array
+    {
+        return array_merge($this->discoverProviders(), [
+            // Your other providers
         ]);
     }
 
@@ -68,6 +82,20 @@ class {{ class }} extends PackageServiceProvider
         $paths = array_merge(
             glob($this->package->basePath('/Console/Commands/*.php')),
             glob($this->package->basePath('/Console/Commands/**/*.php'))
+        );
+
+        return collect($paths)
+            ->map(fn ($filename) => $this->getNamespaceFromFile($filename)->toString())
+            ->toArray();
+    }
+    private function discoverProviders(): array
+    {
+        // automatically include all namespace classes in the Console directory
+        // use glob to return full paths to all files in the Console directory
+
+        $paths = array_merge(
+            glob($this->package->basePath('/Providers/*.php')),
+            glob($this->package->basePath('/Providers/**/*.php'))
         );
 
         return collect($paths)
