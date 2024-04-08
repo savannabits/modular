@@ -2,13 +2,13 @@
 
 namespace Savannabits\Modular\Commands;
 
-
 use Savannabits\Modular\Facades\Modular;
 use Savannabits\Modular\Support\Concerns\GeneratesModularFiles;
 
 class ConsoleMakeCommand extends \Illuminate\Foundation\Console\ConsoleMakeCommand
 {
     use GeneratesModularFiles;
+
     protected $name = 'modular:make-command';
 
     protected $description = 'Create a new Artisan command in a modular package';
