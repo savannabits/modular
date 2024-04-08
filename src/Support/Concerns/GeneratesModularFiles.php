@@ -21,7 +21,7 @@ trait GeneratesModularFiles
     {
         return file_exists($customPath = $this->laravel->basePath(trim($stub, '/')))
             ? $customPath
-            : Modular::packagePath(trim($stub, DIRECTORY_SEPARATOR));
+            : (file_exists($packagePath = Modular::packagePath(trim($stub, DIRECTORY_SEPARATOR))) ? $packagePath : Modular::packagePath('src/Commands/'.trim($stub,DIRECTORY_SEPARATOR)));
     }
 
     public function getModule(): Module
@@ -65,5 +65,12 @@ trait GeneratesModularFiles
             ->sort()
             ->values()
             ->all();
+    }
+
+    protected function viewPath($path = ''): string
+    {
+        $views = $this->getModule()->resourcePath('views');
+
+        return $views.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 }
