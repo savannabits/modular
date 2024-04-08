@@ -16,7 +16,7 @@ class {{ class }} extends PackageServiceProvider
     {
         $package->name(static::$name)
             ->hasViews(static::$viewNamespace)
-            ->hasConsoleCommands($this->getCommands())
+            ->hasCommands($this->getCommands())
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->askToRunMigrations()
@@ -48,7 +48,7 @@ class {{ class }} extends PackageServiceProvider
     {
         // Get an array of file names from the migrations directory
         $glob1 = glob($this->package->basePath('/../database/migrations/*.php'));
-        $glob2 = glob($this->package->basePath('/../database/migrations/*.php.stub'));
+        $glob2 = glob($this->package->basePath('/../database/migrations/**/*.php'));
 
         return collect($glob1)
             ->merge($glob2)
@@ -65,7 +65,10 @@ class {{ class }} extends PackageServiceProvider
         // automatically include all namespace classes in the Console directory
         // use glob to return full paths to all files in the Console directory
 
-        $paths = glob($this->package->basePath('/Console/*.php'));
+        $paths = array_merge(
+            glob($this->package->basePath('/Console/Commands/*.php')),
+            glob($this->package->basePath('/Console/Commands/**/*.php'))
+        );
 
         return collect($paths)
             ->map(fn ($filename) => $this->getNamespaceFromFile($filename)->toString())
@@ -74,7 +77,7 @@ class {{ class }} extends PackageServiceProvider
 
     private function getNamespaceFromFile($path): Stringable
     {
-        return $this->getFullNamespace(Str::of($path)->afterLast('src/')
+        return $this->getFullNamespace(Str::of($path)->afterLast('app/')
             ->replace('/', '\\')
             ->studly()->rtrim('.php'));
     }
@@ -82,7 +85,7 @@ class {{ class }} extends PackageServiceProvider
     private function getFullNamespace(string $relativeNamespace = ''): Stringable
     {
         return Str::of(static::$name)->studly()
-            ->prepend('Vanadi\\')
+            ->prepend(trim(config('modular.namespace','Modules'),'\\').'\\')
             ->append('\\')
             ->append(Str::studly($relativeNamespace));
     }
