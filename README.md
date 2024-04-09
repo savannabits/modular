@@ -5,15 +5,15 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/savannabits/modular/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/savannabits/modular/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/savannabits/modular.svg?style=flat-square)](https://packagist.org/packages/savannabits/modular)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package offers you the simplest way to organize your Laravel code into modules.
+Each module is a separate directory that contains all the necessary files for a complete Laravel package.
+We have tried as much as possible to use or extend the existing laravel commands and structures to offer the same rich
+features that Laravel continues to ship, and make it easier to maintain the package as Laravel evolves.
 
-## Support us
+## Minimum Requirements
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/modular.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/modular)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- Laravel 11 or higher
+- PHP 8.2 or higher
 
 ## Installation
 
@@ -23,37 +23,187 @@ You can install the package via composer:
 composer require savannabits/modular
 ```
 
-You can publish and run the migrations with:
+Once the package is installed, run the following command to prepare your app for generation of modules:
 
 ```bash
-php artisan vendor:publish --tag="modular-migrations"
-php artisan migrate
+php artisan modular:install
 ```
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="modular-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="modular-views"
-```
+Follow the prompts to complete the installation.
 
 ## Usage
 
+This package offers several commands which allow you to generate standard Laravel files and classes in your modules.
+
+### Module Generation
+
+However, first you have to generate a module using the following command:
+
+```bash
+php artisan modular:make ModuleName
+```
+
+The above command will generate a directory structure similar to that of a standard laravel App, with an additional
+service provider to allow registration of the module.
+The module is generated inside the /modules directory of your project. Additionally, the command will proceed to install
+the module as a symlinked local package in your composer file so that it can be autoloaded.
+This process may also be triggered by using the command
+
+```bash
+php artisan modular:activate ModuleName
+```
+
+## Activating a module
+
+Run the following command to activate a module:
+
+```bash
+php artisan modular:activate ModuleName
+```
+
+This command will symlink the module to the composer file and run composer dump-autoload to make the module available to
+the application.
+
+## Deactivating a module
+
+Run the following command to deactivate a module:
+
+```bash
+php artisan modular:deactivate ModuleName
+```
+
+This command will remove the module from the composer file and run composer dump-autoload to remove the module from the
+application.
+
+### Generating a Controller
+
+To generate a controller in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-controller
+```
+
+### Generating a Model
+
+To generate a model in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-model
+```
+
+### Generating a Migration
+
+To generate a migration in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-migration
+```
+
+### Generating a Factory
+
+To generate a factory in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-factory
+```
+
+### Generating a Seeder
+
+To generate a seeder in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-seeder
+```
+
+### Generating a Policy
+
+To generate a policy in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-policy
+```
+
+### Generating a Request
+
+To generate a request in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-request
+```
+
+### Generating a Resource
+
+To generate a resource in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-resource
+```
+
+### Generating a Test
+
+To generate a test in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-test
+```
+
+### Generating a Job
+
+To generate a job in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-job
+```
+
+### Generating a Console Command
+
+To generate a console command in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-command
+```
+
+### Generating a Provider
+
+To generate a provider in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-provider
+```
+
+### Generating a view
+
+To generate a view in a module, run the following command and follow the prompts:
+
+```bash
+php artisan modular:make-view
+```
+
+## Helpers
+
+The package also offers a few helper functions to make it easier to work with modules.
+
+### Get all modules
+
+To get all modules in the application, you can use the following helper function:
+
 ```php
-$modular = new Savannabits\Modular();
-echo $modular->echoPhrase('Hello, Savannabits!');
+use Savannabits\Modular\Facades\Modular;
+
+$modules = Modular::allModules();
+```
+
+The above code will return a collection of instances of the `Savannabits\Modular\Module` class for all active modules in
+the app.
+
+### Get a module
+
+To get a specific module in the application, you can use the following helper function:
+
+```php
+use Savannabits\Modular\Facades\Modular;
+
+$module = Modular::module('ModuleName');
 ```
 
 ## Testing
