@@ -119,4 +119,14 @@ class Module
     {
         return $this->path('resources'.DIRECTORY_SEPARATOR.trim($string, DIRECTORY_SEPARATOR), $relative);
     }
+
+    public function testsPath(string $string, bool $relative = false): string
+    {
+        return $this->path('tests'.DIRECTORY_SEPARATOR.trim($string, DIRECTORY_SEPARATOR), $relative);
+    }
+
+    public function getBaseProviderClass(): string
+    {
+        return $this->makeNamespace('\\'.$this->studlyName.'ServiceProvider');
+    }
 }

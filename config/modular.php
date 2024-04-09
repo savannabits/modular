@@ -28,6 +28,7 @@ return [
         'resources/css',
         'routes',
         'storage',
-        'tests',
+        'tests/Feature',
+        'tests/Unit',
     ],
 ];

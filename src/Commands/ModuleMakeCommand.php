@@ -73,7 +73,7 @@ class ModuleMakeCommand extends Command
         } catch (FileNotFoundException|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
             $this->error($e->getMessage());
         }
-        //        $this->generateModuleFacade();
+        $this->generatePestFiles();
     }
 
     private function generateModuleComposerFile(): void
@@ -131,6 +131,27 @@ class ModuleMakeCommand extends Command
             'class' => $class,
             'namespace' => $namespace,
             'name' => $this->moduleName,
+        ]);
+    }
+
+    private function generatePestFiles(): void
+    {
+        // phpunit.xml
+        $path = Modular::module($this->moduleName)->path('phpunit.xml');
+        $this->copyStubToApp('phpunit', $path, [
+            'moduleName' => $this->moduleStudlyName,
+        ]);
+
+        // Pest.php
+        $path = Modular::module($this->moduleName)->testsPath('Pest.php');
+        $this->copyStubToApp('pest.class', $path, [
+            'namespace' => $this->moduleNamespace,
+        ]);
+
+        // TestCase.php
+        $path = Modular::module($this->moduleName)->testsPath('TestCase.php');
+        $this->copyStubToApp('test-case', $path, [
+            'namespace' => $this->moduleNamespace.'\\Tests',
         ]);
     }
 
