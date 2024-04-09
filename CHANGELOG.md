@@ -2,6 +2,14 @@
 
 All notable changes to `modular` will be documented in this file.
 
+## 0.1.1 - 2024-04-09
+
+### What's Changed
+
+* Updated README, Format code using Pint by @coolsam726 in https://github.com/savannabits/modular/pull/27
+
+**Full Changelog**: https://github.com/savannabits/modular/compare/0.1.0...0.1.1
+
 ## 0.1.0 - 2024-04-09
 
 ### What's Changed
