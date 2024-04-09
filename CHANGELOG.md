@@ -2,6 +2,19 @@
 
 All notable changes to `modular` will be documented in this file.
 
+## 0.1.0 - 2024-04-09
+
+### What's Changed
+
+* New Feat: Generate Views together with Tests by @coolsam726 in https://github.com/savannabits/modular/pull/16
+* Ran Laravel Pint by @coolsam726 in https://github.com/savannabits/modular/pull/17
+* Modification: changed the src path to app in generated modules by @coolsam726 in https://github.com/savannabits/modular/pull/22
+* New Feature: Console Command Generator Command added by @coolsam726 in https://github.com/savannabits/modular/pull/23
+* New Feature: Provider Generation Command by @coolsam726 in https://github.com/savannabits/modular/pull/24
+* New Features: Job Creation and Tests Creation by @coolsam726 in https://github.com/savannabits/modular/pull/26
+
+**Full Changelog**: https://github.com/savannabits/modular/compare/v0.0.2...0.1.0
+
 ## v0.0.2 - 2024-04-07
 
 ### What's Changed
