@@ -155,8 +155,6 @@ class ModuleMakeCommand extends Command
         ]);
     }
 
-
-
     private function installModule(): void
     {
         $this->comment('Activating the new Module');
