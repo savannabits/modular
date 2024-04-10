@@ -7,9 +7,9 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Savannabits\Modular\Facades\Modular;
 use Savannabits\Modular\Support\Concerns\CanManipulateFiles;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\text;
 
 class ModuleMakeCommand extends Command
@@ -40,9 +40,27 @@ class ModuleMakeCommand extends Command
         $this->modulePath = config('modular.path').'/'.$this->moduleName;
         $this->info("Creating module: $this->moduleName in $this->modulePath");
 
-        $this->generateModuleDirectories();
-        $this->generateModuleFiles();
-        $this->installModule();
+        if (! $this->generateModuleDirectories()) {
+            $this->error('Failed to create module directories');
+
+            return 1;
+        }
+        if (! $this->generateModuleFiles()) {
+            $this->error('Failed to create module files');
+
+            return 1;
+        }
+
+        // Ask if to install the new module
+        if (confirm('Do you want to activate the new module now?', false, required: true)) {
+            if (! $this->installModule()) {
+                $this->error('Failed to activate the new module');
+
+                return 1;
+            }
+        }
+
+        return 0;
     }
 
     private function generateModuleDirectories(): bool
@@ -52,6 +70,12 @@ class ModuleMakeCommand extends Command
             $this->error('No directories found in the configuration file');
 
             return false;
+        }
+        // If the module exists and force option is not set, confirm that you want to override files
+        if (is_dir($this->modulePath) && ! $this->option('force')) {
+            if (! confirm('Module already exists. Do you want to override it?')) {
+                return false;
+            }
         }
         foreach ($directories as $directory) {
             $path = $this->modulePath.'/'.ltrim($directory, '/');
@@ -65,15 +89,13 @@ class ModuleMakeCommand extends Command
         return true;
     }
 
-    private function generateModuleFiles(): void
+    private function generateModuleFiles(): bool
     {
         $this->generateModuleComposerFile();
-        try {
-            $this->generateModuleServiceProvider();
-        } catch (FileNotFoundException|NotFoundExceptionInterface|ContainerExceptionInterface $e) {
-            $this->error($e->getMessage());
-        }
+        $this->generateModuleServiceProvider();
         $this->generatePestFiles();
+
+        return true;
     }
 
     private function generateModuleComposerFile(): void
@@ -124,7 +146,9 @@ class ModuleMakeCommand extends Command
      */
     private function generateModuleServiceProvider(): void
     {
-        $path = Modular::module($this->moduleName)->appPath($this->moduleStudlyName.'ServiceProvider.php');
+        $this->comment('Generating Module Service Provider');
+        // get the path to the service provider
+        $path = $this->modulePath.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.$this->moduleStudlyName.'ServiceProvider.php';
         $namespace = $this->moduleNamespace;
         $class = $this->moduleStudlyName.'ServiceProvider';
         $this->copyStubToApp('module.provider', $path, [
@@ -137,27 +161,30 @@ class ModuleMakeCommand extends Command
     private function generatePestFiles(): void
     {
         // phpunit.xml
-        $path = Modular::module($this->moduleName)->path('phpunit.xml');
+        $path = $this->modulePath.DIRECTORY_SEPARATOR.'phpunit.xml';
         $this->copyStubToApp('phpunit', $path, [
             'moduleName' => $this->moduleStudlyName,
         ]);
 
         // Pest.php
-        $path = Modular::module($this->moduleName)->testsPath('Pest.php');
+        $path = $this->modulePath.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Pest.php';
         $this->copyStubToApp('pest.class', $path, [
             'namespace' => $this->moduleNamespace,
         ]);
 
         // TestCase.php
-        $path = Modular::module($this->moduleName)->testsPath('TestCase.php');
+        $path = $this->modulePath.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'TestCase.php';
         $this->copyStubToApp('test-case', $path, [
             'namespace' => $this->moduleNamespace.'\\Tests',
         ]);
     }
 
-    private function installModule(): void
+  
+    private function installModule(): bool
     {
         $this->comment('Activating the new Module');
         $this->call('modular:activate', ['name' => $this->moduleName]);
+
+        return true;
     }
 }

@@ -39,9 +39,9 @@ class ModularServiceProvider extends PackageServiceProvider
         $this->mergeConfigFrom($this->package->basePath('/../config/modular.php'), 'modular');
     }
 
-    private function configureComposerMerge(InstallCommand $command): void
+    private function configureComposerFile(InstallCommand $command): void
     {
-        $command->comment('Configuring Composer merge plugin:');
+        $command->comment('Configuring Composer File:');
         $composerJson = json_decode(file_get_contents(base_path('composer.json')), true);
         // Add the modules repositories into compose if they don't exist
         if (! isset($composerJson['repositories'])) {
@@ -56,29 +56,6 @@ class ModularServiceProvider extends PackageServiceProvider
                 ],
             ];
         }
-        if (! isset($composerJson['extra']['merge-plugin'])) {
-            $composerJson['extra']['merge-plugin'] = [
-                'include' => [
-                    'modules/*/composer.json',
-                ],
-                'replace' => true,
-                'merge-extra' => true,
-                'merge-extra-deep' => true,
-                'merge-scripts' => true,
-
-            ];
-
-            // Ensure the composer-merge-plugin is in the list of allowed plugins
-            if (! isset($composerJson['config']['allow-plugins'])) {
-                $composerJson['config']['allow-plugins'] = [];
-            }
-            // If allowed-plugins is set to true, disregard
-            if ($composerJson['config']['allow-plugins'] === true) {
-                $command->warn('Composer merge plugin already configured. skipping...');
-            } else {
-                $composerJson['config']['allow-plugins']['wikimedia/composer-merge-plugin'] = true;
-            }
-        }
         file_put_contents(base_path('composer.json'), json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         $command->info('Composer file configured successfully');
     }
@@ -86,11 +63,10 @@ class ModularServiceProvider extends PackageServiceProvider
     private function installationSteps(InstallCommand $command): void
     {
         $this->ensureModularPathExists($command);
-        $this->configureComposerMerge($command);
-        // Run composer dump-autoload and pipe the output realtime
-        $command->comment('Running composer dump-autoload:');
+        $this->configureComposerFile($command);
+        /*$command->comment('Running composer dump-autoload:');
         \Savannabits\Modular\Facades\Modular::execCommand('composer dump-autoload');
-        $command->info('Composer dump-autoload completed successfully');
+        $command->info('Composer dump-autoload completed successfully');*/
     }
 
     private function ensureModularPathExists(InstallCommand $command): void

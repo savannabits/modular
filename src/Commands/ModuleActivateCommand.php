@@ -3,6 +3,7 @@
 namespace Savannabits\Modular\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
 use Savannabits\Modular\Facades\Modular;
 
@@ -27,7 +28,9 @@ class ModuleActivateCommand extends Command
     {
         $moduleName = $this->moduleName;
         $repoName = config('modular.vendor', 'modular').'/'.$moduleName;
-        Modular::execCommand('composer require '.$repoName.':@dev');
-        Modular::execCommand("php artisan $moduleName:install");
+        Modular::execCommand('composer require '.$repoName.':@dev', $this);
+        Modular::execCommand('composer dump-autoload');
+        Artisan::call('list');
+        Artisan::call("$moduleName:install");
     }
 }

@@ -2,13 +2,21 @@
 
 namespace Savannabits\Modular;
 
+use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
+
 class Modular
 {
-    public function execCommand(string $command): void
+    public function execCommand(string $command, ?Command $artisan = null): void
     {
-        $process = proc_open($command, [STDIN, STDOUT, STDERR], $pipes, base_path());
-        if (is_resource($process)) {
-            proc_close($process);
+        $process = Process::fromShellCommandline($command);
+        $process->start();
+        foreach ($process as $type => $data) {
+            if (! $artisan) {
+                echo $data;
+            } else {
+                $artisan->info(trim($data));
+            }
         }
     }
 
