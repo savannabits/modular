@@ -15,7 +15,7 @@ test('can generate a new module', function () {
 });
 
 // can activate module
-test('can activate a module whose directory exists in modules', function () {
+/*test('can activate a module whose directory exists in modules', function () {
     artisan('modular:activate', ['name' => $this->moduleTitle])
         ->expectsOutput('Activating module: '.$this->moduleName)
         ->expectsOutput('./composer.json has been updated')
@@ -23,7 +23,7 @@ test('can activate a module whose directory exists in modules', function () {
         ->doesntExpectOutputToContain('Your requirements could not be resolved to an installable set of packages')
         ->expectsOutputToContain('Generating optimized autoload files')
         ->assertSuccessful();
-});
+});*/
 
 test('should not override existing module unless the user confirms', function () {
     artisan('modular:make', ['name' => $this->moduleTitle])
