@@ -9,6 +9,6 @@ phpstan.neon
 testbench.yaml
 vendor
 node_modules
-./skeleton
-./workbench
-./modules
+skeleton
+workbench
+modules
